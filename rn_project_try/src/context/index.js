@@ -6,7 +6,7 @@ const MyContext = React.createContext();
 class MyProvider extends Component {
     state = {
         stage:1,
-        players:['Lisa','Mike','Miles'],
+        players:[],
         result:''
     }
 
@@ -38,11 +38,27 @@ class MyProvider extends Component {
         } else {
             this.setState({
                 stage:2
+            },()=>{
+                this.generateLooser()
             })
         }
-
     }
 
+    generateLooser = () => {
+        const {players} = this.state;
+        this.setState({
+            result: players[Math.floor(Math.random()*players.length)]
+        })
+    }
+
+
+    resetGame = () => {
+        this.setState({
+            stage:1,
+            players:[],
+            result:''
+        })
+    }
 
     render(){
         return(
@@ -52,8 +68,9 @@ class MyProvider extends Component {
                         state: this.state,
                         addPlayer: this.addPlayerHandler,
                         removePLayer: this.removePlayerHandler,
-                        next: this.nextHandler
-                        
+                        next: this.nextHandler,
+                        getNewLooser: this.generateLooser,
+                        resetGame: this.resetGame
                     }}
                 >
                     {this.props.children}
