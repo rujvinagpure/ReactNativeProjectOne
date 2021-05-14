@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
+import Toast from 'react-native-toast-message';
 
 const MyContext = React.createContext();
 
 class MyProvider extends Component {
     state = {
         stage:1,
-        players:[],
+        players:['Lisa','Mike','Miles'],
         result:''
     }
 
@@ -24,6 +25,24 @@ class MyProvider extends Component {
         this.setState({players:newArray})
     }
 
+    nextHandler = () => {
+        const {players} = this.state;
+
+        if(players.length < 2){
+            Toast.show({
+                type:'error',
+                text1: 'Sorry',
+                text2: 'you need at least 2 players',
+                position:'bottom'
+              });
+        } else {
+            this.setState({
+                stage:2
+            })
+        }
+
+    }
+
 
     render(){
         return(
@@ -32,7 +51,8 @@ class MyProvider extends Component {
                     value={{
                         state: this.state,
                         addPlayer: this.addPlayerHandler,
-                        removePLayer: this.removePlayerHandler
+                        removePLayer: this.removePlayerHandler,
+                        next: this.nextHandler
                         
                     }}
                 >
